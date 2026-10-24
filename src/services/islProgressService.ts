@@ -12,6 +12,8 @@ export interface ISLUserProgress {
   quizAttempts: ISLQuizScoreRecord[];
   practicedSigns: string[];
   lastPracticedAt: number | null;
+  videosWatched: string[];
+  matchingGameHighScore: number;
 }
 
 function getDefaultProgress(): ISLUserProgress {
@@ -22,6 +24,8 @@ function getDefaultProgress(): ISLUserProgress {
     quizAttempts: [],
     practicedSigns: [],
     lastPracticedAt: null,
+    videosWatched: [],
+    matchingGameHighScore: 0,
   };
 }
 
@@ -106,6 +110,30 @@ export const islProgressService = {
     }
     progress.lastPracticedAt = Date.now();
     this.saveProgress(progress);
+  },
+
+  recordVideoWatch(signId: string): void {
+    const progress = this.getProgress();
+    if (!progress.videosWatched.includes(signId)) {
+      progress.videosWatched.push(signId);
+      this.saveProgress(progress);
+    }
+  },
+
+  isSignSavedForRevision(signId: string): boolean {
+    return this.isDifficultSign(signId);
+  },
+
+  toggleSignRevision(signId: string): boolean {
+    return this.toggleDifficultSign(signId);
+  },
+
+  recordMatchingScore(score: number): void {
+    const progress = this.getProgress();
+    if (score > progress.matchingGameHighScore) {
+      progress.matchingGameHighScore = score;
+      this.saveProgress(progress);
+    }
   },
 
   resetAllProgress(): void {

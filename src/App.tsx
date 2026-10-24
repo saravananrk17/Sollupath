@@ -20,6 +20,7 @@ import { ISLPracticeWorkspace } from './components/isl/ISLPracticeWorkspace';
 import { ISLQuizView } from './components/isl/ISLQuizView';
 import { ISLProgressView } from './components/isl/ISLProgressView';
 import { ISLSignModal } from './components/isl/ISLSignModal';
+import { SignLibraryView } from './components/video/SignLibraryView';
 
 const AppContent: React.FC = () => {
   const {
@@ -131,6 +132,9 @@ const AppContent: React.FC = () => {
             }}
           />
         )}
+
+        {/* Multi-Sign Language Video Library */}
+        {currentView === 'sign_library' && <SignLibraryView />}
       </main>
 
       {/* Accessible Footer */}

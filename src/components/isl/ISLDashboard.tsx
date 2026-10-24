@@ -3,6 +3,7 @@ import { ISL_CATEGORIES } from '../../data/isl/categories';
 import { ISL_SIGNS } from '../../data/isl/signs';
 import { islProgressService } from '../../services/islProgressService';
 import { IconRenderer } from '../IconRenderer';
+import { useApp } from '../../context/AppContext';
 import {
   BookOpen,
   Layers,
@@ -11,7 +12,8 @@ import {
   TrendingUp,
   ArrowRight,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Video
 } from 'lucide-react';
 
 interface ISLDashboardProps {
@@ -19,6 +21,7 @@ interface ISLDashboardProps {
 }
 
 export const ISLDashboard: React.FC<ISLDashboardProps> = ({ onNavigateSubView }) => {
+  const { setCurrentView } = useApp();
   const progress = islProgressService.getProgress();
 
   // Find next uncompleted sign
@@ -58,6 +61,15 @@ export const ISLDashboard: React.FC<ISLDashboardProps> = ({ onNavigateSubView })
             >
               <Layers className="w-4 h-4" />
               <span>Interactive Flashcards</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentView('sign_library')}
+              className="px-5 py-3 rounded-2xl bg-indigo-500/20 hover:bg-indigo-500/30 text-white font-bold text-xs sm:text-sm border border-indigo-400/30 flex items-center space-x-2 transition-colors touch-target"
+            >
+              <Video className="w-4 h-4 text-indigo-300" />
+              <span>Sign Video Library</span>
             </button>
           </div>
         </div>

@@ -4,11 +4,12 @@
 [![WCAG 2.2 Level AA](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-0F9D92.svg)](docs/ACCESSIBILITY.md)
 [![Eighth Schedule Languages](https://img.shields.io/badge/Languages-22%20Indian%20Scheduled%20%2B%20EN-3446A8.svg)](docs/MULTILINGUAL_SUPPORT.md)
 [![ISL Learning Module](https://img.shields.io/badge/Indian%20Sign%20Language-ISLRTC%20Aligned-FF6B6B.svg)](docs/ISL_LEARNING_MODULE.md)
-[![Tests: Vitest](https://img.shields.io/badge/Tests-30%20Passed-10B981.svg)](src/tests/)
+[![Sign Video Library](https://img.shields.io/badge/Sign%20Library-Multi--Language%20Archive-3446A8.svg)](docs/SIGN_LANGUAGE_LIBRARY.md)
+[![Tests: Vitest](https://img.shields.io/badge/Tests-44%20Passed-10B981.svg)](src/tests/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Offline%20Ready-14233B.svg)](public/sw.js)
 
 > **VBYLD 2027 | Hack for Social Cause | Assistive Technology & Accessibility**  
-> Premium Multilingual Augmentative and Alternative Communication (AAC) & Indian Sign Language (ISL) Learning Platform for India.
+> Premium Multilingual Augmentative and Alternative Communication (AAC) & Indian Sign Language (ISL) Video Platform for India.
 
 ---
 
@@ -16,9 +17,10 @@
 
 Communication is fundamental to human dignity and self-expression. Over **26.8 million persons with disabilities** in India, including millions of Deaf and hard-of-hearing individuals, as well as more than **1.8 million stroke survivors** each year, experience severe barriers in verbal or traditional spoken interactions. In critical settings—such as emergency rooms, medical clinics, pharmacies, government ration offices, classrooms, and public transit—communicating urgent pain or essential needs can be a daunting, high-stress challenge.
 
-**SolluPath 2.0** (Tamil: *சொல்லுபாதை*, meaning *"The Path to Expression"*) bridges two traditionally isolated modalities into one cohesive, accessible platform:
+**SolluPath 2.0** (Tamil: *சொல்லுபாதை*, meaning *"The Path to Expression"*) bridges multiple assistive modalities into one cohesive, accessible platform:
 1. **Multilingual AAC Engine:** Rapid 1-to-2 tap visual communication cards, deterministic indic translations across all 22 scheduled Indian languages, high-contrast presentation mode, and Web Speech voice output.
 2. **Indian Sign Language (ISL) Learn & Practise Module:** An interactive, ISLRTC-aligned learning suite featuring step-by-step kinetic visualizers, 4-mode study flashcards, scenario quizzes, on-device optical practice, and direct integration with AAC phrase cards.
+3. **Sign Language Video Experience & Library:** Ambient living sign language video poster background with WCAG-compliant contrast, and a comprehensive, searchable video archive supporting Indian Sign Language (ISL) along with responsibly isolated comparative collections (American Sign Language - ASL, British Sign Language - BSL).
 
 ---
 
@@ -37,7 +39,20 @@ Communication is fundamental to human dignity and self-expression. Over **26.8 m
   7. *Everyday Needs* (Water, food, rest, yes/no, courtesy)
 - **High-Contrast Full-Screen Presentation & Speech**: Distraction-free typography, dynamic zoom (up to 2.5x), dark mode, and Web Speech API synthesis with clear fallback warnings.
 
-### 🤟 Indian Sign Language (ISL) Learn & Practise (New in SolluPath 2.0)
+### 🎥 Living Sign Language Video Background (`SignVideoBackground.tsx`)
+- **Subtle Living Poster Treatment:** Greets users with an ambient looping demonstration of Indian Sign Language (Namaste greeting) without visual distraction.
+- **Strictly Non-Blocking (`pointer-events-none`):** Clicks, taps, keyboard navigation, and screen-readers pass through with zero interference.
+- **High Text Contrast:** Layered multi-stop gradient overlay ensures foreground text maintains WCAG AAA compliance (12:1+ contrast).
+- **Reduced-Motion & Low-Bandwidth Respect:** Respects OS preferences (`prefers-reduced-motion`) and provides quick pause/hide controls; automatically degrades to a lightweight (<2KB) animated SVG vector poster when offline or on low-bandwidth devices.
+
+### 📚 Multi-Sign Language Video Library (`SignLibraryView.tsx`)
+- **Independent Language Collections:** Indian Sign Language (ISL) as primary collection, alongside separate, clearly labelled comparative collections for American Sign Language (ASL) and British Sign Language (BSL).
+- **Linguistic Integrity:** Crucial structural differences documented (e.g. two-handed fingerspelling in ISL/BSL vs one-handed in ASL). Collections are never combined or presented as interchangeable.
+- **Resilient Multi-Speed Player (`SignVideoPlayer.tsx`):** Playback speeds (`0.5x`, `0.75x`, `1.0x`, `1.25x`), replay, live closed captions (CC), and automatic fallback to animated vector kinematics (`ISLSignVisualizer`) if video files cannot load offline.
+- **Interactive Matching Challenge (`SignMatchingGame.tsx`):** Engaging 2-column game matching sign demonstrations with meanings and usage contexts, with streak scoring and local persistence.
+- **Permanent Text Access:** Step-by-step captions, context of use, grammatical notes, and verification statuses remain 100% accessible even if video media fails.
+
+### 🤟 Indian Sign Language (ISL) Learn & Practise
 - **Sign Learning Studio**: Visual step-by-step instruction with animated SVG vector kinematics, slow-motion (0.5x), play/pause, replay, and anatomical parameters (Handshape, Location, Movement, Non-Manual Features).
 - **Interactive Flashcards**: 4 adaptive study modes:
   - *Meaning → Sign*
@@ -49,7 +64,6 @@ Communication is fundamental to human dignity and self-expression. Over **26.8 m
 - **Two-Way AAC-to-ISL Integration**:
   - View animated ISL sign demonstrations directly from any AAC phrase card via `ISLSignModal` without resetting composed sentences.
   - Push learned concepts from the sign studio directly into the AAC Sentence Builder.
-- **Verified ISLRTC Vocabulary**: 17 curated signs across Greetings, Healthcare, Emergency, Pharmacy, Transit, Everyday, Alphabet, and Numbers.
 
 ### 🇮🇳 All 22 Scheduled Indian Languages Architecture
 - Complete architectural foundation for all **22 languages in the Eighth Schedule of the Indian Constitution** + English.
@@ -120,7 +134,7 @@ Open your browser at `http://localhost:5173` to explore the live application.
 | Command | Action |
 |---|---|
 | `npm run dev` | Starts local development server at `http://localhost:5173` |
-| `npm test` | Runs the Vitest automated test suite (30 unit, integration, and E2E tests) |
+| `npm test` | Runs the Vitest automated test suite (44 unit, integration, and E2E tests) |
 | `npm run test:watch` | Runs Vitest in interactive watch mode |
 | `npm run build` | Runs TypeScript compilation (`tsc`) and Vite production bundle |
 | `npm run preview` | Previews the production build locally |
@@ -129,11 +143,11 @@ Open your browser at `http://localhost:5173` to explore the live application.
 
 ## 7. Testing & Quality Assurance Summary
 
-SolluPath includes a comprehensive test suite in `src/tests/` with **100% passing tests (30/30)**:
+SolluPath includes a comprehensive test suite in `src/tests/` with **100% passing tests (44/44)** across 6 test suites:
 
 ```
- Test Files  5 passed (5)
-      Tests  30 passed (30)
+ Test Files  6 passed (6)
+      Tests  44 passed (44)
 ```
 
 1. **`languages.test.ts` (5 tests)**:
@@ -150,9 +164,16 @@ SolluPath includes a comprehensive test suite in `src/tests/` with **100% passin
    - ISL categories and signs repository schema validation.
    - `islProgressService` persistent state, bookmarks, and immutable resets.
    - `islRecognitionService` supported practice vocabulary declarations.
-   - Full UI navigation to ISL dashboard, flashcard 3D flips, and zero-loss AAC modal integration.
+   - UI navigation to ISL dashboard, flashcard 3D flips, and zero-loss AAC modal integration.
 5. **`components.test.tsx` (4 tests)**:
    - Full AAC user journey: Welcome screen → Quick Communication → Sentence Builder → Language Switching → Presentation Mode.
+6. **`signLibrary.test.tsx` (14 tests)**:
+   - Multi-sign language separation and registry integrity (ISL vs ASL vs BSL).
+   - One-handed vs two-handed fingerspelling distinction documentation.
+   - Registry search across English and Tamil keywords.
+   - Video watches and Matching Challenge streak high scores.
+   - Living poster video background rendering, reduced motion pause, and collection switching.
+   - Video player modal with step-by-step captions and AAC Sentence Builder insertion.
 
 ---
 
@@ -162,8 +183,8 @@ SolluPath includes a comprehensive test suite in `src/tests/` with **100% passin
 2. The Service Worker (`sw.js`) automatically pre-caches the static application shell.
 3. **To test offline capability:**
    - In Chrome DevTools, open the **Network** tab and toggle the throttling dropdown to **Offline**.
-   - Navigate between Home, Quick Communication, Situations, Presentation Mode, and ISL Flashcards.
-   - All 150+ phrase translations, audio chimes, ISL vector animations, and builder operations function without an internet connection.
+   - Navigate between Home, Quick Communication, Situations, Presentation Mode, ISL Flashcards, and Sign Library.
+   - All 150+ phrase translations, audio chimes, ISL vector animations, closed captions, and builder operations function without an internet connection.
 4. On mobile devices, tap **Add to Home Screen** or **Install App** to launch SolluPath as a standalone full-screen application.
 
 ---
@@ -206,6 +227,11 @@ SolluPath includes a comprehensive test suite in `src/tests/` with **100% passin
 - [ISL Camera Privacy & Consent Architecture](docs/ISL_PRIVACY.md)
 - [ISL Testing & Verification Strategy](docs/ISL_TESTING.md)
 - [ISL Engineering Roadmap & Future Research](docs/ISL_ROADMAP.md)
+
+### Sign Language Video Experience Documentation
+- [Sign Language Video Library Architecture](docs/SIGN_LANGUAGE_LIBRARY.md)
+- [Sign Language Video Background & Living Poster](docs/VIDEO_BACKGROUND.md)
+- [Guide: Adding & Curating Sign Language Collections](docs/ADDING_SIGN_LANGUAGES.md)
 
 ---
 

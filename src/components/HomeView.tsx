@@ -10,8 +10,10 @@ import {
   MessageSquare,
   Sliders,
   Globe2,
-  Sparkles
+  Sparkles,
+  BookOpen
 } from 'lucide-react';
+import { SignVideoBackground } from './video/SignVideoBackground';
 
 interface HomeViewProps {
   onOpenLanguage: () => void;
@@ -35,77 +37,114 @@ export const HomeView: React.FC<HomeViewProps> = ({ onOpenLanguage, onOpenAccess
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8">
-      {/* Welcome Reassuring Banner */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white rounded-3xl p-6 sm:p-8 border border-brand-border shadow-sm gap-4">
-        <div>
-          <span className="text-xs font-bold text-brand-indigo uppercase tracking-wider">
-            SolluPath Assistive AAC & ISL Platform
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-navy mt-1">
-            {ui.welcomeInstruction}
-          </h1>
-          <p className="text-sm text-brand-muted mt-1">
-            Tap a card below to communicate with doctors, drivers, pharmacists, or family.
-          </p>
-        </div>
-
-        {/* Current Communication Target Language Pill */}
-        <div className="flex items-center space-x-3 bg-brand-ivory border border-brand-border/80 rounded-2xl p-3">
-          <div className="w-10 h-10 rounded-xl bg-brand-indigo/10 flex items-center justify-center text-brand-indigo">
-            <Globe2 className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[11px] font-semibold text-brand-muted block">Output Language</span>
-            <button
-              type="button"
-              onClick={onOpenLanguage}
-              className="text-sm font-bold text-brand-navy hover:text-brand-indigo underline text-left"
-            >
-              {communicationLanguage.nativeName} ({communicationLanguage.name})
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ISL Learn & Practise Discovery Card */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => setCurrentView('isl_dashboard')}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') setCurrentView('isl_dashboard');
-        }}
-        aria-label="Open Indian Sign Language Learn and Practise Module"
-        className="bg-gradient-to-r from-teal-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 border border-teal-500/30 shadow-md hover:shadow-lg transition-all cursor-pointer group flex flex-col md:flex-row items-start md:items-center justify-between gap-4 select-none touch-target"
+      {/* Welcome Reassuring Banner with Subtle Living Sign Language Video Background */}
+      <SignVideoBackground
+        posterTitle="Living Sign Language Poster"
+        posterSubtitle="Verified Indian Sign Language Greeting (Namaste)"
       >
-        <div className="flex items-start sm:items-center space-x-4">
-          <div className="w-12 h-12 rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 flex-shrink-0 group-hover:scale-105 transition-transform">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-bold uppercase tracking-wider mb-1">
-              <span>NEW MODULE</span>
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
-              ISL Learn & Practise — இந்திய சைகை மொழி
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-0.5 max-w-xl">
-              Learn verified Indian Sign Language (ISL) for hospitals, transit, and emergency communication with interactive flashcards and guided practice.
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="max-w-xl">
+            <span className="text-xs font-bold text-teal-300 uppercase tracking-wider block mb-1">
+              SolluPath Assistive AAC & Sign Language Platform
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              {ui.welcomeInstruction}
+            </h1>
+            <p className="text-sm text-slate-200 mt-2 leading-relaxed">
+              Tap a card below to communicate with doctors, drivers, pharmacists, or family, or explore verified sign language demonstrations.
             </p>
           </div>
+
+          {/* Current Communication Target Language Pill */}
+          <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 text-white">
+            <div className="w-10 h-10 rounded-xl bg-teal-400/20 flex items-center justify-center text-teal-300">
+              <Globe2 className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[11px] font-semibold text-slate-300 block">Output Language</span>
+              <button
+                type="button"
+                onClick={onOpenLanguage}
+                className="text-sm font-bold text-white hover:text-teal-300 underline text-left focus:outline-none focus:ring-2 focus:ring-teal-400 rounded"
+              >
+                {communicationLanguage.nativeName} ({communicationLanguage.name})
+              </button>
+            </div>
+          </div>
+        </div>
+      </SignVideoBackground>
+
+      {/* Dual Discovery Cards: ISL Learn & Practise + Sign Language Video Library */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Card 1: ISL Learn & Practise */}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setCurrentView('isl_dashboard')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') setCurrentView('isl_dashboard');
+          }}
+          aria-label="Open Indian Sign Language Learn and Practise Module"
+          className="bg-gradient-to-br from-teal-950 via-slate-900 to-slate-950 text-white rounded-3xl p-6 border border-teal-500/30 shadow-md hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between select-none touch-target"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 group-hover:scale-105 transition-transform">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-bold uppercase tracking-wider">
+                Interactive Studio
+              </span>
+            </div>
+
+            <h2 className="text-xl font-bold tracking-tight group-hover:text-teal-300 transition-colors">
+              ISL Learn & Practise
+            </h2>
+            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              Step-by-step visual lessons, 3D flashcards, camera-assisted guided practice, and ISLRTC-aligned quizzes.
+            </p>
+          </div>
+
+          <div className="mt-5 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-bold text-teal-400">
+            <span>Explore Practice Studio</span>
+            <ArrowRight className="w-4 h-4 rtl-mirror group-hover:translate-x-1 transition-transform" />
+          </div>
         </div>
 
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setCurrentView('isl_dashboard');
+        {/* Card 2: Sign Language Video Library */}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setCurrentView('sign_library')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') setCurrentView('sign_library');
           }}
-          className="px-5 py-2.5 bg-brand-teal hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center space-x-2 flex-shrink-0"
+          aria-label="Open Sign Language Video Library"
+          className="bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 text-white rounded-3xl p-6 border border-indigo-500/30 shadow-md hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between select-none touch-target"
         >
-          <span>Start Learning ISL</span>
-          <ArrowRight className="w-4 h-4 rtl-mirror" />
-        </button>
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300 group-hover:scale-105 transition-transform">
+                <BookOpen className="w-6 h-6" />
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold uppercase tracking-wider">
+                Video Archive
+              </span>
+            </div>
+
+            <h2 className="text-xl font-bold tracking-tight group-hover:text-indigo-300 transition-colors">
+              Sign Language Video Library
+            </h2>
+            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              Searchable video demonstrations with closed captions, regional variants, speed controls, and comparative ASL/BSL collections.
+            </p>
+          </div>
+
+          <div className="mt-5 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-bold text-indigo-400">
+            <span>Open Video Library</span>
+            <ArrowRight className="w-4 h-4 rtl-mirror group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
       </div>
 
       {/* Continue Draft Message Banner (if user has composed an active message) */}

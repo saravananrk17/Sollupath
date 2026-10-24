@@ -22,7 +22,8 @@ export type AppView =
   | 'isl_flashcards'
   | 'isl_practice'
   | 'isl_quiz'
-  | 'isl_progress';
+  | 'isl_progress'
+  | 'sign_library';
 
 interface AppContextType {
   settings: UserSettings;
@@ -66,6 +67,10 @@ interface AppContextType {
   activeISLModalSign: ISLSignItem | null;
   setActiveISLModalSign: (sign: ISLSignItem | null) => void;
   viewISLSign: (signId: string) => void;
+  // Sign Library additions
+  activeSignLibraryId: string | null;
+  setActiveSignLibraryId: (id: string | null) => void;
+  openSignLibrary: (signId?: string) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -91,6 +96,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ISL Module states
   const [activeISLSignId, setActiveISLSignId] = useState<string | null>(null);
   const [activeISLModalSign, setActiveISLModalSign] = useState<ISLSignItem | null>(null);
+
+  // Sign Library states
+  const [activeSignLibraryId, setActiveSignLibraryId] = useState<string | null>(null);
+
+  const openSignLibrary = useCallback((signId?: string) => {
+    if (signId) {
+      setActiveSignLibraryId(signId);
+    }
+    setCurrentView('sign_library');
+  }, []);
 
   const viewISLSign = useCallback((signId: string) => {
     const s = getISLSignById(signId);
@@ -366,7 +381,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setActiveISLSignId,
     activeISLModalSign,
     setActiveISLModalSign,
-    viewISLSign
+    viewISLSign,
+    activeSignLibraryId,
+    setActiveSignLibraryId,
+    openSignLibrary
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

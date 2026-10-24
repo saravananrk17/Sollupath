@@ -12,7 +12,8 @@ import {
   Star,
   PlusSquare,
   MessageSquare,
-  Sparkles
+  Sparkles,
+  BookOpen
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -45,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { view: 'favorites', label: ui.favorites, icon: Star, count: favorites.length, isActive: currentView === 'favorites' },
     { view: 'custom', label: ui.customPhrases, icon: PlusSquare, isActive: currentView === 'custom' },
     { view: 'isl_dashboard', label: ui.islLearn, icon: Sparkles, isActive: isISLActive },
+    { view: 'sign_library', label: 'Sign Library', icon: BookOpen, isActive: currentView === 'sign_library' },
   ];
 
   return (
