@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ISLSignItem } from '../../data/isl/signs';
 import { ISLSignVisualizer } from './ISLSignVisualizer';
-import { X, Camera } from 'lucide-react';
+import { SignVideoPlayer } from '../video/SignVideoPlayer';
+import { signLanguageRegistry } from '../../data/signLanguages/registry';
+import { X, Camera, Video, Activity } from 'lucide-react';
 
 interface ISLSignModalProps {
   sign: ISLSignItem | null;
@@ -14,7 +16,12 @@ export const ISLSignModal: React.FC<ISLSignModalProps> = ({
   onClose,
   onOpenPractice
 }) => {
+  const [mediaTab, setMediaTab] = useState<'video' | 'kinematic'>('video');
+
   if (!sign) return null;
+
+  const videoSignEntry = signLanguageRegistry.getSignByLinkedISLSignId(sign.id) ||
+                         signLanguageRegistry.getSignById(sign.id);
 
   return (
     <div
@@ -23,7 +30,7 @@ export const ISLSignModal: React.FC<ISLSignModalProps> = ({
       aria-label={`ISL Sign for ${sign.meaning}`}
       className="fixed inset-0 z-50 bg-brand-navy/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
     >
-      <div className="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 animate-in fade-in">
+      <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 animate-in fade-in">
         {/* Header */}
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -50,10 +57,47 @@ export const ISLSignModal: React.FC<ISLSignModalProps> = ({
           </button>
         </div>
 
+        {/* Media Switcher Tabs */}
+        <div className="px-5 pt-3 pb-1 bg-slate-50 border-b border-slate-100 flex items-center space-x-2">
+          <button
+            type="button"
+            onClick={() => setMediaTab('video')}
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all touch-target ${
+              mediaTab === 'video'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50'
+            }`}
+          >
+            <Video className="w-3.5 h-3.5" />
+            <span>Verified Video Player</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMediaTab('kinematic')}
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all touch-target ${
+              mediaTab === 'kinematic'
+                ? 'bg-brand-navy text-white shadow-sm'
+                : 'text-slate-600 hover:text-brand-navy hover:bg-slate-200'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span>Kinematic Steps</span>
+          </button>
+        </div>
+
         {/* Modal Body */}
         <div className="p-6 overflow-y-auto space-y-4">
-          {/* Visual Sign Kinematics */}
-          <ISLSignVisualizer sign={sign} size="normal" showControls={true} />
+          {mediaTab === 'video' && videoSignEntry ? (
+            <SignVideoPlayer
+              sign={videoSignEntry}
+              autoPlay={true}
+              loop={true}
+              showSubtitlesDefault={true}
+            />
+          ) : (
+            <ISLSignVisualizer sign={sign} size="normal" showControls={true} />
+          )}
 
           {/* Key Parameters */}
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-xs">

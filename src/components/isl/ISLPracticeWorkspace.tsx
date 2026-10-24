@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ISL_SIGNS, getISLSignById } from '../../data/isl/signs';
 import { ISLSignVisualizer } from './ISLSignVisualizer';
+import { ISLTabNav } from './ISLTabNav';
 import { islRecognitionService, RecognitionFeedback } from '../../services/islRecognitionService';
 import { islProgressService } from '../../services/islProgressService';
 import { useApp } from '../../context/AppContext';
@@ -104,6 +105,9 @@ export const ISLPracticeWorkspace: React.FC<ISLPracticeWorkspaceProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
+      {/* Top Unified ISL & Video Tab Navigation */}
+      <ISLTabNav currentTab="practice" />
+
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div className="flex items-center space-x-3">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { PhraseItem } from '../data/phrases';
 import { IconRenderer } from './IconRenderer';
-import { Star } from 'lucide-react';
+import { Star, Video } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { ISL_SIGNS } from '../data/isl/signs';
 
@@ -55,16 +55,16 @@ export const PhraseCard: React.FC<PhraseCardProps> = ({ phrase, isSelected, onSe
           {linkedISLSign && (
             <button
               type="button"
-              aria-label={`View Indian Sign Language (ISL) demonstration for ${text}`}
+              aria-label={`View Indian Sign Language (ISL) Sign Video demonstration for ${text}`}
               onClick={(e) => {
                 e.stopPropagation();
                 viewISLSign(linkedISLSign.id);
               }}
-              className="px-2 py-1 rounded-lg text-[10px] font-bold bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200 transition-colors touch-target flex items-center"
-              title="View verified ISL demonstration"
+              className="px-2.5 py-1 rounded-xl text-xs font-bold bg-teal-50 text-teal-800 hover:bg-teal-100 border border-teal-200 transition-colors touch-target flex items-center space-x-1 shadow-xs"
+              title="Watch verified sign language video"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-teal-500 mr-1"></span>
-              ISL Sign
+              <Video className="w-3.5 h-3.5 text-teal-600" />
+              <span>Sign Video</span>
             </button>
           )}
 

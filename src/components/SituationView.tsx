@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { SITUATION_COLLECTIONS } from '../data/categories';
-import { AAC_PHRASES } from '../data/phrases';
+import { AAC_PHRASES, PhraseItem } from '../data/phrases';
 import { PhraseCard } from './PhraseCard';
 import { SentenceBuilder } from './SentenceBuilder';
 import { IconRenderer } from './IconRenderer';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Grid, Video, Plus, Check } from 'lucide-react';
+import { SignVideoPlayer } from './video/SignVideoPlayer';
+import { signLanguageRegistry } from '../data/signLanguages/registry';
+import { SignEntry } from '../data/signLanguages/types';
 
 export const SituationView: React.FC = () => {
   const {
@@ -13,14 +16,27 @@ export const SituationView: React.FC = () => {
     setSelectedSituation,
     setCurrentView,
     addPhraseToMessage,
-    communicationLanguage
+    communicationLanguage,
+    selectedPhraseIds
   } = useApp();
+
+  const [situationTab, setSituationTab] = useState<'cards' | 'videos'>('cards');
 
   const currentSituation = SITUATION_COLLECTIONS.find(s => s.id === selectedSituation) || SITUATION_COLLECTIONS[0];
 
   const situationPhrases = AAC_PHRASES.filter(p =>
     p.situations.includes(currentSituation.id)
   );
+
+  const situationVideoSigns = useMemo(() => {
+    return situationPhrases
+      .map(p => {
+        const sign = signLanguageRegistry.getSignByLinkedPhraseId(p.id) ||
+                     signLanguageRegistry.getSignById(p.id);
+        return { phrase: p, sign };
+      })
+      .filter((item): item is { phrase: PhraseItem; sign: SignEntry } => item.sign !== undefined);
+  }, [situationPhrases]);
 
   const situationLabel = currentSituation.translations[communicationLanguage.id] ||
                          currentSituation.translations['en'] ||
@@ -35,7 +51,7 @@ export const SituationView: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Side: Situation Header & Phrase Grid */}
+        {/* Left Side: Situation Header & Phrase / Video Grid */}
         <div className="lg:col-span-7 xl:col-span-8 space-y-6">
           {/* Situation Picker Tabs */}
           <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-thin">
@@ -92,16 +108,127 @@ export const SituationView: React.FC = () => {
             </div>
           </div>
 
-          {/* Phrases Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-            {situationPhrases.map((phrase) => (
-              <PhraseCard
-                key={phrase.id}
-                phrase={phrase}
-                onSelect={(p) => addPhraseToMessage(p.id)}
-              />
-            ))}
+          {/* Situation Media Tabs */}
+          <div className="flex items-center space-x-2 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs">
+            <button
+              type="button"
+              onClick={() => setSituationTab('cards')}
+              className={`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all touch-target ${
+                situationTab === 'cards'
+                  ? 'bg-brand-navy text-white shadow-sm'
+                  : 'text-slate-600 hover:text-brand-navy hover:bg-slate-100'
+              }`}
+            >
+              <Grid className="w-4 h-4" />
+              <span>Situation Phrase Cards ({situationPhrases.length})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSituationTab('videos')}
+              className={`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all touch-target ${
+                situationTab === 'videos'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-indigo-600 hover:bg-indigo-50'
+              }`}
+            >
+              <Video className="w-4 h-4" />
+              <span>Situation Sign Videos</span>
+              <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-indigo-200 text-indigo-900 font-bold ml-1">
+                {situationVideoSigns.length}
+              </span>
+            </button>
           </div>
+
+          {/* Phrases Grid vs Videos Grid */}
+          {situationTab === 'cards' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+              {situationPhrases.map((phrase) => (
+                <PhraseCard
+                  key={phrase.id}
+                  phrase={phrase}
+                  onSelect={(p) => addPhraseToMessage(p.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {situationVideoSigns.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {situationVideoSigns.map(({ phrase, sign }) => {
+                    const isSelected = selectedPhraseIds.includes(phrase.id);
+                    const phraseText = phrase.translations[communicationLanguage.id] ||
+                                       phrase.translations['en'] ||
+                                       phrase.translations['ta'] ||
+                                       '';
+                    return (
+                      <div
+                        key={sign.id}
+                        className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-indigo-300 transition-colors"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full">
+                              Verified Sign Video
+                            </span>
+                            <span className="text-xs text-slate-500 font-semibold">
+                              {sign.languageId.toUpperCase()}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-bold text-brand-navy">
+                            {phraseText}
+                          </h3>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            {sign.meaning.en} • {sign.meaning.ta || ''}
+                          </p>
+                        </div>
+
+                        {/* Embedded Video Player */}
+                        <div className="rounded-2xl overflow-hidden border border-slate-200">
+                          <SignVideoPlayer
+                            sign={sign}
+                            autoPlay={false}
+                            loop={true}
+                            showSubtitlesDefault={true}
+                          />
+                        </div>
+
+                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-3">
+                          <button
+                            type="button"
+                            onClick={() => addPhraseToMessage(phrase.id)}
+                            className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-all touch-target ${
+                              isSelected
+                                ? 'bg-emerald-600 text-white shadow-sm'
+                                : 'bg-brand-navy hover:bg-brand-indigo text-white shadow-sm'
+                            }`}
+                          >
+                            {isSelected ? (
+                              <>
+                                <Check className="w-4 h-4" />
+                                <span>Added in Builder</span>
+                              </>
+                            ) : (
+                              <>
+                                <Plus className="w-4 h-4" />
+                                <span>Add to Message Builder</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="bg-white rounded-3xl p-12 text-center border border-slate-200">
+                  <p className="text-sm font-semibold text-slate-600">
+                    No sign videos currently tagged for this specific situation. Check the Sign Video Library for the complete catalog!
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Right Side: Persistent Sentence Builder */}

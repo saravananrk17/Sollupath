@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { ISL_SIGNS, getISLSignById } from '../../data/isl/signs';
 import { ISLSignVisualizer } from './ISLSignVisualizer';
+import { SignVideoPlayer } from '../video/SignVideoPlayer';
+import { signLanguageRegistry } from '../../data/signLanguages/registry';
+import { ISLTabNav } from './ISLTabNav';
 import { islProgressService } from '../../services/islProgressService';
 import { useApp } from '../../context/AppContext';
 import {
@@ -14,7 +17,9 @@ import {
   BookOpen,
   Info,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Video,
+  Layers
 } from 'lucide-react';
 
 interface ISLLessonStudioProps {
@@ -30,8 +35,10 @@ export const ISLLessonStudio: React.FC<ISLLessonStudioProps> = ({
 }) => {
   const { addPhraseToMessage, setCurrentView } = useApp();
   const [currentSignId, setCurrentSignId] = useState<string>(initialSignId || ISL_SIGNS[0].id);
+  const [mediaMode, setMediaMode] = useState<'video' | 'kinematics'>('video');
 
   const sign = getISLSignById(currentSignId) || ISL_SIGNS[0];
+  const matchedSign = signLanguageRegistry.getSignByLinkedISLSignId(sign.id);
   const isCompleted = islProgressService.isLessonCompleted(sign.id);
   const isDifficult = islProgressService.isDifficultSign(sign.id);
 
@@ -62,6 +69,9 @@ export const ISLLessonStudio: React.FC<ISLLessonStudioProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
+      {/* Top Unified ISL & Video Tab Navigation */}
+      <ISLTabNav currentTab="studio" />
+
       {/* Top Navigation */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div className="flex items-center space-x-3">
@@ -147,8 +157,45 @@ export const ISLLessonStudio: React.FC<ISLLessonStudioProps> = ({
               )}
             </div>
 
-            {/* Visualizer component */}
-            <ISLSignVisualizer sign={sign} size="large" showControls={true} />
+            {/* Demonstration Media Mode Tabs */}
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <span className="text-xs font-bold text-brand-muted uppercase tracking-wider">
+                Demonstration Mode:
+              </span>
+              <div className="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl">
+                <button
+                  type="button"
+                  onClick={() => setMediaMode('video')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                    mediaMode === 'video'
+                      ? 'bg-white text-brand-navy shadow-sm'
+                      : 'text-brand-muted hover:text-brand-navy'
+                  }`}
+                >
+                  <Video className="w-3.5 h-3.5 text-brand-teal" />
+                  <span>Video Player</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMediaMode('kinematics')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                    mediaMode === 'kinematics'
+                      ? 'bg-white text-brand-navy shadow-sm'
+                      : 'text-brand-muted hover:text-brand-navy'
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5 text-brand-indigo" />
+                  <span>Vector Kinematics</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Media Content */}
+            {mediaMode === 'video' && matchedSign ? (
+              <SignVideoPlayer sign={matchedSign} autoPlay={true} />
+            ) : (
+              <ISLSignVisualizer sign={sign} size="large" showControls={true} />
+            )}
 
             {/* Step-by-Step Instructions */}
             <div className="space-y-2 pt-2">

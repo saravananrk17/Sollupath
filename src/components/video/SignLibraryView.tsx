@@ -5,6 +5,7 @@ import { SIGN_LANGUAGE_COLLECTIONS, SIGN_CATEGORIES } from '../../data/signLangu
 import { signLanguageRegistry } from '../../data/signLanguages/registry';
 import { SignVideoPlayer } from './SignVideoPlayer';
 import { SignMatchingGame } from './SignMatchingGame';
+import { ISLTabNav } from '../isl/ISLTabNav';
 import { islProgressService } from '../../services/islProgressService';
 import {
   Search,
@@ -89,7 +90,10 @@ export const SignLibraryView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 animate-fade-in">
+      {/* Top ISL & Sign Video Tab Navigation */}
+      <ISLTabNav currentTab="library" />
+
       {/* Hero Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white rounded-3xl p-6 sm:p-8 border border-brand-border shadow-sm gap-6">
         <div>

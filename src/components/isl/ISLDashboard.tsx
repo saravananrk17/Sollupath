@@ -4,6 +4,7 @@ import { ISL_SIGNS } from '../../data/isl/signs';
 import { islProgressService } from '../../services/islProgressService';
 import { IconRenderer } from '../IconRenderer';
 import { useApp } from '../../context/AppContext';
+import { ISLTabNav } from './ISLTabNav';
 import {
   BookOpen,
   Layers,
@@ -28,7 +29,10 @@ export const ISLDashboard: React.FC<ISLDashboardProps> = ({ onNavigateSubView })
   const nextSign = ISL_SIGNS.find(s => !progress.completedLessons.includes(s.id)) || ISL_SIGNS[0];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6">
+      {/* Top ISL & Sign Video Tab Navigation */}
+      <ISLTabNav currentTab="overview" />
+
       {/* Hero Banner */}
       <div className="relative overflow-hidden bg-gradient-to-r from-brand-navy via-brand-indigo to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-700/50">
         <div className="relative z-10 max-w-3xl space-y-4">

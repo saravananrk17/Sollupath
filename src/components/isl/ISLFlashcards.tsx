@@ -2,6 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { ISL_SIGNS, ISLSignItem } from '../../data/isl/signs';
 import { ISL_CATEGORIES } from '../../data/isl/categories';
 import { ISLSignVisualizer } from './ISLSignVisualizer';
+import { SignVideoPlayer } from '../video/SignVideoPlayer';
+import { signLanguageRegistry } from '../../data/signLanguages/registry';
+import { ISLTabNav } from './ISLTabNav';
 import { islProgressService } from '../../services/islProgressService';
 import {
   Rotate3d,
@@ -12,7 +15,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowLeft,
-  Layers
+  Layers,
+  Video
 } from 'lucide-react';
 
 export type FlashcardMode = 'meaning_to_sign' | 'sign_to_meaning' | 'recall' | 'difficult_only';
@@ -47,6 +51,8 @@ export const ISLFlashcards: React.FC<ISLFlashcardsProps> = ({
 
   const currentSign: ISLSignItem | undefined = activeDeck[currentIndex];
   const isDifficult = currentSign ? islProgressService.isDifficultSign(currentSign.id) : false;
+  const matchedSign = currentSign ? signLanguageRegistry.getSignByLinkedISLSignId(currentSign.id) : undefined;
+  const [flashcardMediaTab, setFlashcardMediaTab] = useState<'video' | 'kinematics'>('video');
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -91,6 +97,9 @@ export const ISLFlashcards: React.FC<ISLFlashcardsProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      {/* Top Unified ISL & Video Tab Navigation */}
+      <ISLTabNav currentTab="flashcards" />
+
       {/* Top Navigation & Mode Switcher */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
         <div className="flex items-center space-x-3">
@@ -288,8 +297,42 @@ export const ISLFlashcards: React.FC<ISLFlashcardsProps> = ({
                 ) : (
                   // Back: Reveal Verified ISL Demonstration
                   <div className="space-y-4 text-left" onClick={(e) => e.stopPropagation()}>
+                    {/* Media Mode Tabs on Flashcard */}
+                    {matchedSign && (
+                      <div className="flex items-center justify-center space-x-2 pb-2">
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setFlashcardMediaTab('video'); }}
+                          className={`px-3 py-1 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 ${
+                            flashcardMediaTab === 'video'
+                              ? 'bg-brand-navy text-white shadow-sm'
+                              : 'bg-slate-100 text-brand-muted hover:text-brand-navy'
+                          }`}
+                        >
+                          <Video className="w-3.5 h-3.5 text-brand-teal" />
+                          <span>Video Demonstration</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setFlashcardMediaTab('kinematics'); }}
+                          className={`px-3 py-1 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 ${
+                            flashcardMediaTab === 'kinematics'
+                              ? 'bg-brand-navy text-white shadow-sm'
+                              : 'bg-slate-100 text-brand-muted hover:text-brand-navy'
+                          }`}
+                        >
+                          <Layers className="w-3.5 h-3.5 text-brand-indigo" />
+                          <span>Kinematic Steps</span>
+                        </button>
+                      </div>
+                    )}
+
                     <div className="max-w-md mx-auto">
-                      <ISLSignVisualizer sign={currentSign} size="normal" />
+                      {flashcardMediaTab === 'video' && matchedSign ? (
+                        <SignVideoPlayer sign={matchedSign} autoPlay={true} />
+                      ) : (
+                        <ISLSignVisualizer sign={currentSign} size="normal" />
+                      )}
                     </div>
                     <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 max-w-md mx-auto text-center">
                       <p className="text-sm font-bold text-brand-navy">

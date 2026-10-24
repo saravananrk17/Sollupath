@@ -15,19 +15,23 @@ import {
 interface SignVideoPlayerProps {
   sign: SignEntry;
   autoPlay?: boolean;
+  loop?: boolean;
+  showSubtitlesDefault?: boolean;
   className?: string;
 }
 
 export const SignVideoPlayer: React.FC<SignVideoPlayerProps> = ({
   sign,
   autoPlay = true,
+  loop = true,
+  showSubtitlesDefault = true,
   className = ''
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(autoPlay);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
-  const [showCaptions, setShowCaptions] = useState<boolean>(true);
+  const [showCaptions, setShowCaptions] = useState<boolean>(showSubtitlesDefault);
   const [videoFailed, setVideoFailed] = useState<boolean>(false);
   const [currentCaptionIdx, setCurrentCaptionIdx] = useState<number>(0);
 
@@ -121,7 +125,7 @@ export const SignVideoPlayer: React.FC<SignVideoPlayerProps> = ({
             poster={sign.posterUrl}
             playsInline
             muted
-            loop
+            loop={loop}
             onTimeUpdate={handleTimeUpdate}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}

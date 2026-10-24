@@ -115,7 +115,7 @@ describe('SolluPath 2.0 — ISL Learn & Practise Module', () => {
       expect(screen.getByText(/Learn. Practise. Communicate./i)).toBeInTheDocument();
       expect(screen.getByText(/Sign Learning Studio/i)).toBeInTheDocument();
       expect(screen.getByText(/Sign Flashcards/i)).toBeInTheDocument();
-      expect(screen.getByText(/Guided Practice/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Guided Practice/i).length).toBeGreaterThanOrEqual(1);
       expect(screen.getByText(/Practice Quizzes/i)).toBeInTheDocument();
     });
 
