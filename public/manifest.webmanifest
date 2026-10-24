@@ -1,0 +1,17 @@
+{
+  "name": "SolluPath — Your Voice, Your Way",
+  "short_name": "SolluPath",
+  "description": "Premium Multilingual Assistive AAC Communication Platform for 22 Indian Languages",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#14233B",
+  "theme_color": "#14233B",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

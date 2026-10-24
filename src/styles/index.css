@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-navy: #14233B;
+    --brand-indigo: #3446A8;
+    --brand-teal: #0F9D92;
+    --brand-ivory: #F7F8FA;
+    --brand-text: #172033;
+    --brand-muted: #657188;
+    --brand-border: #E3E8EF;
+    --font-scale: 1rem;
+  }
+
+  /* High contrast mode overrides */
+  .high-contrast {
+    --brand-navy: #000000;
+    --brand-indigo: #002288;
+    --brand-teal: #006655;
+    --brand-ivory: #FFFFFF;
+    --brand-text: #000000;
+    --brand-muted: #222222;
+    --brand-border: #000000;
+  }
+
+  /* Font scale support */
+  .font-size-standard {
+    --font-scale: 1rem;
+    font-size: 16px;
+  }
+  .font-size-large {
+    --font-scale: 1.15rem;
+    font-size: 18px;
+  }
+  .font-size-xlarge {
+    --font-scale: 1.3rem;
+    font-size: 21px;
+  }
+
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans',
+      'Noto Sans Tamil', 'Noto Sans Devanagari', 'Noto Sans Bengali', 'Noto Sans Telugu',
+      'Noto Sans Kannada', 'Noto Sans Malayalam', 'Noto Sans Gurmukhi', 'Noto Sans Gujarati',
+      'Noto Sans Oriya', 'Noto Nastaliq Urdu', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Prevent text clipping of complex Indic matras & conjuncts */
+  p, h1, h2, h3, h4, h5, h6, span, button, input, textarea {
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Reduced motion compliance */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 3px solid #0F9D92 !important;
+  outline-offset: 3px !important;
+}
+
+/* Minimum accessible touch target */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* RTL layout helpers */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-mirror {
+  transform: scaleX(-1);
+}
+
+/* Presentation mode custom pulse */
+@keyframes calm-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.animate-calm-pulse {
+  animation: calm-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

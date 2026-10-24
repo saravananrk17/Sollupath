@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ta" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="theme-color" content="#14233B" />
+    <meta name="description" content="SolluPath — Premium multilingual AAC assistive communication platform for hospitals, clinics, transit, and everyday life in Tamil and 22 Indian languages." />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>SolluPath — Your Voice, Your Way | சொல்லுபாதை</title>
+  </head>
+  <body class="bg-brand-ivory text-brand-text min-h-screen selection:bg-brand-teal selection:text-white antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Service worker registration for PWA offline support
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            console.log('SolluPath Service Worker registered successfully:', reg.scope);
+          }).catch((err) => {
+            console.warn('SolluPath Service Worker registration skipped or failed:', err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
